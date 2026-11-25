@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OLYMPIC AGENCY — your future is our concern</title>
+<style>
+:root{--blue:#0B1F3A;--gold:#D4AF37;--goldL:#FFF8E1;--white:#FFFEFB;--gray:#F4F6F9}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,system-ui,sans-serif}
+body{background:var(--white);color:#111}
+header{position:sticky;top:0;z-index:99;background:var(--blue);color:white;padding:12px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;border-bottom:4px solid var(--gold)}
+.logo b{font-size:16px;letter-spacing:1px} .logo i{display:block;font-size:11px;color:var(--gold);letter-spacing:2px}
+.search{flex:1;max-width:480px;display:flex;gap:6px} .input{width:100%;padding:10px 12px;border-radius:10px;border:2px solid var(--goldL);font-size:12px;background:white}
+.btn{padding:8px 12px;border-radius:10px;border:2px solid var(--blue);font-weight:800;font-size:10px;cursor:pointer;background:white;color:var(--blue)} .btn-w{background:var(--blue);color:white} .btn-g{background:var(--gold);color:#000;border-color:var(--gold)}
+.cart{background:var(--gold);color:#000;padding:6px 12px;border-radius:20px;font-weight:900;font-size:11px}
+.nav{position:sticky;top:62px;z-index:90;background:white;border-bottom:3px solid var(--blue);display:flex;gap:6px;overflow:auto;padding:10px} .nav::-webkit-scrollbar{display:none}
+.t{white-space:nowrap;padding:6px 12px;border-radius:20px;border:2px solid var(--blue);font-size:9px;font-weight:900;cursor:pointer;background:white} .t.active{background:var(--blue);color:white} .t.gold{border-color:var(--gold);background:var(--goldL)} .t.gold.active{background:var(--gold);color:#000}
+.wrap{max-width:1400px;margin:auto;padding:12px}
+.card{background:white;border:2px solid var(--blue);border-radius:14px;padding:12px;margin-bottom:10px} .card.blue{background:linear-gradient(135deg,var(--blue),#051122);color:white;border:none} .card.gold{border-color:var(--gold);background:var(--goldL)}
+.grid{display:grid;gap:8px} .g4{grid-template-columns:repeat(4,1fr)} .g3{grid-template-columns:repeat(3,1fr)} .g2{grid-template-columns:1fr 1fr} @media(max-width:900px){.g4,.g3{grid-template-columns:repeat(2,1fr)}} @media(max-width:550px){.g4,.g3,.g2{grid-template-columns:1fr}}
+.prop{border:2px solid var(--blue);border-radius:14px;overflow:hidden;background:white;cursor:pointer;transition:.2s} .prop:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(11,31,58,.2)} .prop.rent{border-color:var(--gold)}
+.pimg{height:200px;overflow:hidden;background:var(--gray);position:relative} .pimg img{width:100%;height:100%;object-fit:cover}
+.badge{font-size:7px;padding:3px 7px;border-radius:20px;font-weight:900;border:1px solid;display:inline-block} .bblue{background:var(--blue);color:white;border-color:var(--blue)} .bgold{background:var(--gold);color:#000;border-color:var(--gold)} .bwhite{background:white;color:var(--blue);border-color:var(--blue)}
+.price{color:var(--blue);font-weight:900;font-size:14px} .old{font-size:9px;text-decoration:line-through;opacity:.6}
+.hidden{display:none!important}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:none;place-items:center;padding:10px} .modal.show{display:grid} .modalBox{background:white;border-radius:16px;max-width:600px;width:100%;max-height:90vh;overflow:auto;padding:14px;border:3px solid var(--blue)}
+.list{display:flex;justify-content:space-between;padding:8px;border:2px solid var(--goldL);border-radius:10px;margin-bottom:6px;font-size:11px;background:white}
+.tape{background:var(--goldL);border:2px dashed var(--gold);border-radius:10px;padding:8px;text-align:center;font-size:10px}
+</style>
+</head>
+<body>
+<header>
+<div class="logo"><b>OLYMPIC AGENCY</b><i>your future is our concern</i></div>
+<div class="search"><input id="search" class="input" placeholder="Search Duplex, Land in Onitsha, Shop, Bungalow..."><button class="btn btn-w" onclick="doSearch()">Search</button></div>
+<div style="display:flex;gap:6px;align-items:center"><span id="favCount" class="cart">Saved: 0</span><button class="btn btn-g" onclick="openAI()">🏠 AI Finder</button><button class="btn" onclick="switchTab('saved')">Saved</button></div>
+</header>
+
+<div class="nav" id="nav"></div>
+
+<div class="wrap">
+<div style="background:var(--goldL);border:2px dashed var(--gold);padding:8px;border-radius:10px;font-size:10px;margin-bottom:10px">
+⚙️ OWNER: Your WhatsApp for enquiries: <input id="ownerNumber" class="input" value="2348030000000" style="max-width:160px;display:inline-block"> — Frontend Only, no backend, enquiries go to WhatsApp.
+</div>
+
+<div id="v-home">
+<div class="card blue">
+<h2 style="font-size:22px">OLYHPIC AGENCY — YOUR FUTURE IS OUR CONCERN</h2>
+<p style="color:var(--gold);font-size:11px;margin-top:4px">Standard Estate Management — Sales • Rentals • Lands • Shortlet • Commercial • Property Management — Verified Properties</p>
+<div class="grid g3" style="margin-top:12px">
+<div class="card gold" style="margin:0;color:#000"><b>🏠 FOR SALE</b><br><span style="font-size:10px">Duplex, Bungalow, Flats, Terraces, Detached — Direct brief, verified documents</span><br><button class="btn btn-w" style="margin-top:6px" onclick="filterCat('Sale','all')">View Sale</button></div>
+<div class="card gold" style="margin:0;color:#000"><b>🔑 FOR RENT</b><br><span style="font-size:10px">Self-contain, 1Bed, 2Bed, 3Bed, Duplex, Shops, Offices — Pay & Pack in</span><br><button class="btn btn-w" style="margin-top:6px" onclick="filterCat('Rent','all')">View Rent</button></div>
+<div class="card gold" style="margin:0;color:#000;border-style:dashed"><b>🤖 AI PROPERTY FINDER</b><br><span style="font-size:10px">Tell AI your budget, location, type — it will find matching property — your future is our concern</span><br><button class="btn btn-g" style="margin-top:6px" onclick="openAI()">Find My House</button></div>
+</div>
+</div>
+
+<div class="card">
+<h3>Standard Estate Categories</h3>
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
+<button class="btn btn-w" onclick="filterCat('Sale','all')">All For Sale</button>
+<button class="btn" onclick="filterCat('Sale','Duplex')">Duplex Sale</button>
+<button class="btn" onclick="filterCat('Sale','Bungalow')">Bungalow Sale</button>
+<button class="btn" onclick="filterCat('Sale','Land')">Land Sale</button>
+<button class="btn" onclick="filterCat('Sale','Flat')">Flat Sale</button>
+<button class="btn btn-w" style="background:var(--gold);color:#000;border-color:var(--gold)" onclick="filterCat('Rent','all')">All For Rent</button>
+<button class="btn" onclick="filterCat('Rent','Self-contain')">Self-contain</button>
+<button class="btn" onclick="filterCat('Rent','2Bedroom')">2 Bedroom Rent</button>
+<button class="btn" onclick="filterCat('Rent','Shop')">Shop / Office</button>
+<button class="btn" onclick="filterCat('Shortlet','all')">Shortlet / Short Stay</button>
+<button class="btn" onclick="filterCat('Commercial','all')">Commercial Property</button>
+</div>
+</div>
+
+<div class="card blue"><h3>Featured Verified Properties — OLYHPIC AGENCY</h3><div class="grid g4" id="homeGrid" style="margin-top:10px"></div></div>
+</div>
+
+<div id="v-shop" class="hidden">
+<div class="card blue"><h3>All Properties — Filters <button class="btn btn-g" onclick="openAI()">🏠 AI Finder</button></h3>
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">
+<select id="fPurpose" class="input" style="max-width:130px" onchange="renderShop()"><option value="all">All Purpose</option><option>Sale</option><option>Rent</option><option>Shortlet</option><option>Commercial</option><option>Land</option></select>
+<select id="fType" class="input" style="max-width:140px" onchange="renderShop()"><option value="all">All Type</option><option>Duplex</option><option>Bungalow</option><option>Flat</option><option>Self-contain</option><option>2Bedroom</option><option>Land</option><option>Shop</option><option>Office</option></select>
+<select id="fLocation" class="input" style="max-width:140px" onchange="renderShop()"><option value="all">All Location</option><option>Onitsha</option><option>Awka</option><option>Asaba</option><option>Nnewi</option><option>Enugu</option><option>Lagos</option></select>
+<select id="fPrice" class="input" style="max-width:140px" onchange="renderShop()"><option value="all">Any Price</option><option value="0-300000">Rent: Under 300k</option><option value="300000-700000">Rent: 300k-700k</option><option value="700000-2000000">Rent: 700k-2M</option><option value="0-20000000">Sale: Under 20M</option><option value="20000000-50000000">Sale: 20M-50M</option><option value="50000000-100000000">Sale: 50M+</option></select>
+</div>
+</div>
+<div class="grid g4" id="shopGrid"></div>
+</div>
+
+<div id="v-product" class="hidden"><div class="card"><button class="btn" onclick="switchTab('home')">← Back</button></div><div class="grid g2" id="productDetail"></div></div>
+
+<div id="v-saved" class="hidden">
+<div class="grid g2">
+<div class="card"><h3>Saved Properties</h3><div id="savedList"></div></div>
+<div class="card gold"><h3>Enquiry — Your Future is Our Concern</h3>
+<div id="enquiryList"></div>
+<div style="margin-top:8px">
+<input id="cName" class="input" placeholder="Your Full Name">
+<input id="cPhone" class="input" placeholder="Your WhatsApp Number" style="margin-top:6px">
+<select id="cPurpose" class="input" style="margin-top:6px"><option>Interested in Buying</option><option>Interested in Renting</option><option>Interested in Inspection</option><option>Want to List My Property</option></select>
+<textarea id="cMessage" class="input" placeholder="Message — e.g I need 2 bedroom in Onitsha GRA, budget 700k, need it this week..." style="margin-top:6px"></textarea>
+<button class="btn btn-w" style="width:100%;margin-top:8px" onclick="sendEnquiry()">Send Enquiry via WhatsApp — Frontend Only</button>
+<div id="orderResult" style="margin-top:8px"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- AI FINDER MODAL -->
+<div class="modal" id="aiModal"><div class="modalBox">
+<div style="display:flex;justify-content:space-between"><h3 style="color:var(--blue)">🏠 OLYHPIC AI Property Finder</h3><button class="btn" onclick="closeAI()">X</button></div>
+<p style="font-size:10px;margin-top:4px">Your future is our concern — Tell me what you need, I will find it.</p>
+
+<div id="aiStep1">
+<h4 style="margin-top:10px">What do you want?</h4>
+<div class="grid g2" style="margin-top:8px">
+<button class="btn btn-w" style="padding:16px" onclick="aiSet('purpose','Sale')">🏠 Buy / Sale</button>
+<button class="btn btn-g" style="padding:16px" onclick="aiSet('purpose','Rent')">🔑 Rent</button>
+<button class="btn" style="padding:16px" onclick="aiSet('purpose','Land')">🌍 Land</button>
+<button class="btn" style="padding:16px" onclick="aiSet('purpose','Shortlet')">🏨 Shortlet</button>
+</div>
+
+<h4 style="margin-top:10px">Property Type?</h4>
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">
+<button class="btn" onclick="aiSet('type','Duplex')">Duplex</button><button class="btn" onclick="aiSet('type','Bungalow')">Bungalow</button><button class="btn" onclick="aiSet('type','Flat')">Flat / Apartment</button><button class="btn" onclick="aiSet('type','Self-contain')">Self-contain</button><button class="btn" onclick="aiSet('type','2Bedroom')">2 Bedroom</button><button class="btn" onclick="aiSet('type','3Bedroom')">3 Bedroom</button><button class="btn" onclick="aiSet('type','Land')">Land</button><button class="btn" onclick="aiSet('type','Shop')">Shop / Office</button>
+</div>
+
+<h4 style="margin-top:10px">Location?</h4>
+<select id="aiLocation" class="input"><option>Onitsha</option><option>Awka</option><option>Asaba</option><option>Nnewi</option><option>Enugu</option><option>Lagos</option><option>Anywhere</option></select>
+
+<h4 style="margin-top:10px">Budget?</h4>
+<select id="aiBudget" class="input"><option value="0-300000">Rent: 150k - 300k</option><option value="300000-700000">Rent: 300k - 700k</option><option value="700000-1500000">Rent: 700k - 1.5M</option><option value="0-20000000">Buy: Under 20M</option><option value="20000000-50000000">Buy: 20M - 50M</option><option value="50000000-100000000">Buy: 50M - 100M</option><option value="100000000-1000000000">Buy: 100M+</option></select>
+
+<h4 style="margin-top:10px">Bedrooms?</h4>
+<select id="aiBed" class="input"><option value="any">Any</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option></select>
+
+<button class="btn btn-w" style="width:100%;margin-top:12px" onclick="runAI()">🔍 Find My Property Now</button>
+<div id="aiResult" style="margin-top:10px"></div>
+</div>
+</div></div>
+
+<script>
+const properties=[
+{id:1,purpose:'Sale',type:'Duplex',location:'Onitsha',beds:4,baths:5,title:'4Bed Duplex — Onitsha GRA — Fully Detached — Sale',price:45000000,oldPrice:50000000,area:'500sqm',doc:'C of O',img:'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600',desc:'4 Bedroom fully detached duplex in Onitsha GRA, all ensuite, fitted kitchen, 2 sitting rooms, BQ, C of O, good road.'},
+{id:2,purpose:'Sale',type:'Bungalow',location:'Awka',beds:3,baths:3,title:'3Bed Bungalow — Awka — Ngozika Estate — Sale',price:28000000,oldPrice:32000000,area:'400sqm',doc:'Deed',img:'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600',desc:'3 Bedroom bungalow in Ngozika Estate Awka, fenced, gated, water, light, deed of assignment.'},
+{id:3,purpose:'Sale',type:'Land',location:'Asaba',beds:0,baths:0,title:'Land For Sale — Asaba — 500sqm — Behind Asaba Mall',price:12000000,oldPrice:15000000,area:'500sqm',doc:'C of O',img:'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600',desc:'Dry land 500sqm behind Asaba Mall, C of O, instant allocation, buy and build.'},
+{id:4,purpose:'Rent',type:'2Bedroom',location:'Onitsha',beds:2,baths:2,title:'2 Bedroom Flat — Onitsha — Omagba — Rent',price:650000,oldPrice:750000,area:'Pay yearly',doc:'Yearly',img:'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600',desc:'2 Bedroom flat in Omagba Onitsha, all ensuite, water, prepaid meter, good road, yearly 650k.'},
+{id:5,purpose:'Rent',type:'Self-contain',location:'Awka',beds:1,baths:1,title:'Self-contain — Awka — Ifite — Student Area — Rent',price:180000,oldPrice:200000,area:'Yearly',doc:'Yearly',img:'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600',desc:'Self-contain in Ifite Awka, water, tiled, prepaid, yearly 180k.'},
+{id:6,purpose:'Rent',type:'Shop',location:'Onitsha',beds:0,baths:1,title:'Shop For Rent — Onitsha Main Market — Rent',price:400000,oldPrice:500000,area:'Shop',doc:'Yearly',img:'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600',desc:'Lock up shop in Onitsha Main Market, busy area, yearly 400k.'},
+{id:7,purpose:'Sale',type:'Flat',location:'Enugu',beds:3,baths:3,title:'3Bed Flat For Sale — Enugu — Independence Layout',price:35000000,oldPrice:40000000,area:'Block',doc:'Deed',img:'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600',desc:'3 Bedroom flat for sale in Independence Layout Enugu, block of 4, good title.'},
+{id:8,purpose:'Rent',type:'Duplex',location:'Asaba',beds:4,baths:4,title:'4Bed Duplex For Rent — Asaba — Okpanam Road',price:1800000,oldPrice:2000000,area:'Yearly',doc:'Yearly',img:'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600',desc:'4Bed duplex for rent in Asaba Okpanam Road, fitted, all ensuite, 1.8M yearly.'},
+{id:9,purpose:'Shortlet',type:'2Bedroom',location:'Onitsha',beds:2,baths:2,title:'Shortlet — 2Bed Short Stay — Onitsha GRA — 15k Daily',price:15000,oldPrice:20000,area:'Per Night',doc:'Daily',img:'https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=600',desc:'2Bed shortlet in Onitsha GRA, AC, WiFi, kitchen, daily 15k.'},
+{id:10,purpose:'Commercial',type:'Office',location:'Awka',beds:0,baths:2,title:'Office Space — Awka — Eke Awka — Commercial Rent',price:800000,oldPrice:1000000,area:'Office',doc:'Yearly',img:'https://images.unsplash.com/photo-1497366811353-26cc3f5faffa?w=600',desc:'Office space in Eke Awka commercial area, open space, yearly 800k.'},
+{id:11,purpose:'Sale',type:'Bungalow',location:'Nnewi',beds:4,baths:4,title:'4Bed Bungalow — Nnewi — Akamili — Sale — 35M',price:35000000,oldPrice:38000000,area:'600sqm',doc:'Deed',img:'https://images.unsplash.com/photo-1600573472550-8090b5e0745b?w=600',desc:'4 Bedroom bungalow in Nnewi Akamili, 600sqm, fenced, 35M.'},
+{id:12,purpose:'Land',type:'Land',location:'Onitsha',beds:0,baths:0,title:'Land — Onitsha — 3rd Niger Bridge Area — 1000sqm — 25M',price:25000000,oldPrice:30000000,area:'1000sqm',doc:'Deed',img:'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600',desc:'1000sqm land near 2nd Niger Bridge, good for estate, deed.'},
+];
+
+let saved=[], enquiries=[], aiFilter={purpose:'',type:'',location:'',budget:'',bed:''};
+
+function renderNav(){
+document.getElementById('nav').innerHTML=`<div class="t active" onclick="switchTab('home')">HOME</div><div class="t" onclick="switchTab('shop')">ALL PROPERTIES</div><div class="t" onclick="filterCat('Sale','all')">FOR SALE</div><div class="t" onclick="filterCat('Rent','all')">FOR RENT</div><div class="t" onclick="filterCat('Land','all')">LAND</div><div class="t" onclick="filterCat('Shortlet','all')">SHORTLET</div><div class="t gold" onclick="filterCat('Commercial','all')">COMMERCIAL</div><div class="t gold" onclick="openAI()">🏠 AI FINDER</div>`;
+}
+function switchTab(id){
+document.querySelectorAll('[id^=v-]').forEach(e=>e.classList.add('hidden'));
+document.getElementById('v-'+id).classList.remove('hidden');
+if(id==='home') renderHome(); if(id==='shop') renderShop(); if(id==='saved') renderSaved();
+}
+window.switchTab=switchTab;
+
+function propCard(p){
+return `<div class="prop ${p.purpose==='Rent'?'rent':''}" onclick="openProperty(${p.id})">
+<div class="pimg"><img src="${p.img}" onerror="this.src='https://via.placeholder.com/600x400?text=OLYHPIC'"><div style="position:absolute;top:8px;left:8px"><span class="badge bblue">${p.purpose}</span> <span class="badge bgold">${p.type}</span></div><div style="position:absolute;bottom:8px;left:8px"><span class="badge bwhite">📍 ${p.location} • ${p.beds? p.beds+' Bed': p.area}</span></div><div style="position:absolute;top:8px;right:8px"><span class="badge bwhite">✅ Verified — ${p.doc}</span></div></div>
+<div style="padding:10px"><div style="font-size:11px;font-weight:800;height:32px;overflow:hidden">${p.title}</div><div style="font-size:9px;color:#666;margin-top:2px">${p.desc.slice(0,55)}...</div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px"><span class="price">${p.purpose==='Rent'||p.purpose==='Shortlet'?'₦'+p.price.toLocaleString()+(p.purpose==='Shortlet'?' / night':' / year'):'₦'+p.price.toLocaleString()}</span><span class="old">₦${p.oldPrice.toLocaleString()}</span></div><div style="display:flex;gap:6px;margin-top:8px"><button class="btn btn-w" onclick="event.stopPropagation();saveProp(${p.id})">💾 Save</button><button class="btn" onclick="event.stopPropagation();openProperty(${p.id})">View</button></div></div>
+</div>`;
+}
+
+function renderHome(){document.getElementById('homeGrid').innerHTML=properties.map(p=>propCard(p)).join('')}
+function filterCat(purpose, type){
+document.getElementById('fPurpose').value=purpose==='all'?'all':purpose;
+if(type!=='all') document.getElementById('fType').value=type;
+switchTab('shop'); renderShop();
+}
+window.filterCat=filterCat;
+
+function renderShop(){
+const purpose=document.getElementById('fPurpose').value, type=document.getElementById('fType').value, loc=document.getElementById('fLocation').value, price=document.getElementById('fPrice').value, term=document.getElementById('search').value.toLowerCase();
+let list=[...properties];
+if(purpose!=='all') list=list.filter(p=>p.purpose===purpose || (purpose==='Land'&&p.type==='Land'));
+if(type!=='all') list=list.filter(p=>p.type===type);
+if(loc!=='all') list=list.filter(p=>p.location===loc);
+if(price!=='all'){let [min,max]=price.split('-').map(Number); list=list.filter(p=>p.price>=min && p.price<=max);}
+if(term) list=list.filter(p=>p.title.toLowerCase().includes(term) || p.location.toLowerCase().includes(term) || p.type.toLowerCase().includes(term));
+document.getElementById('shopGrid').innerHTML=list.map(p=>propCard(p)).join('')||'<div class="card">No match — Try AI Finder — Your future is our concern, we will find it.</div>';
+}
+function doSearch(){switchTab('shop'); renderShop()} window.doSearch=doSearch;
+
+function openProperty(id){
+const p=properties.find(x=>x.id===id);
+switchTab('product');
+document.getElementById('productDetail').innerHTML=`
+<div class="card"><div class="pimg" style="height:380px"><img src="${p.img}"></div><div style="display:flex;gap:6px;margin-top:8px"><div class="tape">Front View — Verified</div><div class="tape">Interior — ${p.beds} Beds</div><div class="tape">Document — ${p.doc}</div></div></div>
+<div class="card"><h2 style="color:var(--blue)">${p.title}</h2><div style="margin-top:6px"><span class="badge bblue">${p.purpose}</span> <span class="badge bgold">${p.type}</span> <span class="badge bwhite">📍 ${p.location}</span> <span class="badge bwhite">${p.beds? p.beds+' Bed • '+p.baths+' Bath': p.area}</span> <span class="badge bwhite">Doc: ${p.doc}</span></div>
+<div style="margin-top:10px"><span class="price" style="font-size:24px">${p.purpose==='Rent'||p.purpose==='Shortlet'?'₦'+p.price.toLocaleString()+(p.purpose==='Shortlet'?' / night':' / year'):'₦'+p.price.toLocaleString()}</span> <span class="old">₦${p.oldPrice.toLocaleString()}</span></div>
+<p style="margin-top:10px;font-size:11px;line-height:1.5">${p.desc}<br><br><b>OLYHPIC AGENCY — your future is our concern:</b><br>• Verified property — No scam — We inspect before listing<br>• Agency fee: 10% for Rent, 5% for Sale — Standard<br>• Inspection fee: ₦5k (deducted if you take property)<br>• Legal fee: Covered in agency<br>• Location: ${p.location} — Good road — Water — Light</p>
+<div class="grid g2" style="margin-top:12px"><button class="btn btn-w" onclick="saveProp(${p.id})">💾 Save Property</button><button class="btn btn-g" onclick="enquireProp(${p.id})">📲 Enquire via WhatsApp</button></div>
+<div class="tape" style="margin-top:10px">Call for inspection — OLYHPIC AGENCY — Your future is our concern — We don't list what we haven't seen.</div>
+</div>`;
+}
+
+function saveProp(id){const p=properties.find(x=>x.id===id); if(!saved.find(s=>s.id===id)){saved.push(p); localStorage.setItem('oly_saved',JSON.stringify(saved)); updateFav(); alert('Saved — Check Saved tab');} else alert('Already saved')} window.saveProp=saveProp;
+function updateFav(){document.getElementById('favCount').innerText=`Saved: ${saved.length}`; localStorage.setItem('oly_saved',JSON.stringify(saved))}
+function renderSaved(){
+document.getElementById('savedList').innerHTML=saved.length? saved.map((p,i)=>`<div class="list"><div><b>${p.title}</b><br>📍 ${p.location} • ${p.type} • ₦${p.price.toLocaleString()} ${p.purpose==='Rent'?' / year':''}</div><button class="btn" onclick="saved.splice(${i},1);localStorage.setItem('oly_saved',JSON.stringify(saved));renderSaved();updateFav()">Remove</button></div>`).join(''):'No saved properties — Save properties you like';
+document.getElementById('enquiryList').innerHTML=enquiries.length? enquiries.map(e=>`<div class="list"><div><b>${e.title}</b><br>Enquiry for inspection</div></div>`).join(''):'No enquiries yet';
+updateFav();
+}
+function enquireProp(id){const p=properties.find(x=>x.id===id); enquiries.push(p); switchTab('saved'); renderSaved(); sendWhatsAppForProperty(p)} window.enquireProp=enquireProp;
+
+function sendWhatsAppForProperty(p){
+const owner=document.getElementById('ownerNumber').value.trim()||'2348030000000';
+const msg=`*OLYHPIC AGENCY - PROPERTY ENQUIRY*%0A_your future is our concern_%0A%0A*Property:* ${p.title}%0A*Purpose:* ${p.purpose}%0A*Type:* ${p.type}%0A*Location:* ${p.location}%0A*Price:* N${p.price.toLocaleString()} ${p.purpose==='Rent'?'per year':'%0A*Doc:* '+p.doc}%0A%0A*I am interested, please schedule inspection.*%0A%0AFrom OLYHPIC website`;
+window.open(`https://wa.me/${owner}?text=${msg}`,'_blank');
+}
+
+function sendEnquiry(){
+const owner=document.getElementById('ownerNumber').value.trim()||'2348030000000';
+const name=document.getElementById('cName').value.trim(); if(!name) return alert('Enter name');
+const phone=document.getElementById('cPhone').value.trim();
+const purpose=document.getElementById('cPurpose').value;
+const message=document.getElementById('cMessage').value.trim();
+let savedTitles=saved.map(s=>s.title).join(', ')||'None';
+let msg=`*OLYHPIC AGENCY - GENERAL ENQUIRY*%0A_your future is our concern_%0A%0A*Name:* ${name}%0A*Phone:* ${phone}%0A*Need:* ${purpose}%0A*Message:* ${message}%0A%0A*Saved Properties:* ${savedTitles}%0A%0A_Please respond fast. From OLYHPIC website_`;
+window.open(`https://wa.me/${owner}?text=${msg}`,'_blank');
+document.getElementById('orderResult').innerHTML=`<div class="card blue">WhatsApp opened — Enquiry sent to ${owner}. We will reply — Your future is our concern.</div>`;
+}
+window.sendEnquiry=sendEnquiry;
+
+// AI FINDER
+function openAI(){document.getElementById('aiModal').classList.add('show')} function closeAI(){document.getElementById('aiModal').classList.remove('show')} window.openAI=openAI; window.closeAI=closeAI;
+function aiSet(key,val){aiFilter[key]=val; document.getElementById('aiResult').innerHTML+=`<div style="font-size:10px;margin-top:4px">Selected ${key}: <b>${val}</b></div>`;} window.aiSet=aiSet;
+function runAI(){
+const loc=document.getElementById('aiLocation').value, budget=document.getElementById('aiBudget').value, bed=document.getElementById('aiBed').value;
+aiFilter.location=loc; aiFilter.budget=budget; aiFilter.bed=bed;
+let list=[...properties];
+if(aiFilter.purpose) list=list.filter(p=>p.purpose===aiFilter.purpose || (aiFilter.purpose==='Land'&&p.type==='Land'));
+if(aiFilter.type) list=list.filter(p=>p.type===aiFilter.type);
+if(aiFilter.location && aiFilter.location!=='Anywhere') list=list.filter(p=>p.location===aiFilter.location);
+if(aiFilter.budget){let [min,max]=aiFilter.budget.split('-').map(Number); list=list.filter(p=>p.price>=min && p.price<=max);}
+if(aiFilter.bed && aiFilter.bed!=='any'){let b=parseInt(aiFilter.bed); list=list.filter(p=>p.beds>=b);}
+
+let html=`<div class="card gold"><b>AI Found ${list.length} Properties for you — OLYHPIC AGENCY</b><br><span style="font-size:10px">Purpose: ${aiFilter.purpose||'Any'} • Type: ${aiFilter.type||'Any'} • Location: ${loc} • Budget: ${budget} • Bed: ${bed}</span></div>`;
+html+= list.map(p=>`<div class="list"><div><b>${p.title}</b><br>📍 ${p.location} • ₦${p.price.toLocaleString()} • ${p.doc}</div><button class="btn btn-w" onclick="openProperty(${p.id});closeAI()">View</button></div>`).join('') || '<div class="card">No exact match — But we have similar — Chat us on WhatsApp — Your future is our concern, we will find it for you.</div>';
+document.getElementById('aiResult').innerHTML=html;
+}
+window.runAI=runAI;
+
+saved=JSON.parse(localStorage.getItem('oly_saved')||'[]');
+renderNav(); renderHome(); updateFav();
+</script>
+</body>
+  </html>
